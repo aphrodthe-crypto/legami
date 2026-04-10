@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Legami Chimici</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .dashboard { 
+            background: white; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            overflow: hidden; 
+            max-width: 900px; 
+            margin: auto; 
+        }
+        .tabs { 
+            display: flex; 
+            background: #007bff; 
+            color: white; 
+            cursor: pointer; 
+            font-weight: bold;
+        }
+        .tab { 
+            flex: 1; 
+            padding: 15px; 
+            text-align: center; 
+            border-right: 1px solid #0056b3; 
+            transition: background 0.3s;
+        }
+        .tab:hover, .tab.active { 
+            background: #0056b3; 
+        }
+        .content { 
+            padding: 20px; 
+            display: none; 
+        }
+        .content.active { 
+            display: block; 
+        }
+        .section { 
+            margin-bottom: 20px; 
+            padding: 15px; 
+            background: #f9f9f9; 
+            border-left: 4px solid #007bff; 
+            border-radius: 4px;
+        }
+        h3 { margin-top: 0; color: #333; }
+        input { width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab(event, 'tab1')">1. Stabilità</div>
+            <div class="tab" onclick="showTab(event, 'tab2')">2. ΔE</div>
+            <div class="tab" onclick="showTab(event, 'tab3')">3. Ionico</div>
+            <div class="tab" onclick="showTab(event, 'tab4')">4. Cov. Apolare</div>
+            <div class="tab" onclick="showTab(event, 'tab5')">5. Cov. Polare</div>
+            <div class="tab" onclick="showTab(event, 'tab6')">6. Idrogeno</div>
+        </div>
+
+        <div id="tab1" class="content active">
+            <div class="section">
+                <h3>Teoria: La Stabilità Energetica</h3>
+                <p>Gli atomi si legano per raggiungere uno stato di minore energia e maggiore stabilità. Seguono la Regola dell'Ottetto per completare il livello esterno.</p>
+            </div>
+            <div class="section">
+                <h3>Simulazione: Raggiungi l'Ottetto</h3>
+                <p>Aggiungi elettroni al guscio esterno per stabilizzare l'atomo:</p>
+                <input type="range" min="1" max="8" value="1" oninput="document.getElementById('elecCount').innerText = this.value; if(this.value == 8) alert('Stabilità raggiunta: Ottetto completo!');">
+                <p>Elettroni di valenza: <strong id="elecCount">1</strong></p>
+            </div>
+        </div>
+
+        <div id="tab2" class="content">
+            <div class="section">
+                <h3>Teoria: Elettronegatività (ΔE)</h3>
+                <p>La differenza di elettronegatività (ΔE) determina il tipo di legame. Minore di 0.4 è apolare, tra 0.4 e 1.7 è polare, maggiore di 1.7 è ionico.</p>
+            </div>
+            <div class="section">
+                <h3>Simulazione: Calcola il Legame</h3>
+                <p>Imposta il valore di ΔE per vedere il risultato:</p>
+                <input type="range" min="0" max="3.3" step="0.1" value="0" oninput="updateBondType(this.value)">
+                <p>Valore ΔE: <strong id="deltaValue">0</strong> ➔ <strong id="bondResult" style="color: #007bff;">Legame Covalente Apolare</strong></p>
+            </div>
+        </div>
+
+        <div id="tab3" class="content">
+            <div class="section">
+                <h3>Teoria: Legame Ionico</h3>
+                <p>Un atomo (metallo) cede elettroni a un altro (non metallo). Si formano ioni attratti da forze elettrostatiche. Esempio: NaCl.</p>
+            </div>
+        </div>
+
+        <div id="tab4" class="content">
+            <div class="section">
+                <h3>Teoria: Legame Covalente Apolare</h3>
+                <p>Due atomi condividono equamente coppie di elettroni. Nessun dipolo si forma. Esempio: H2, O2.</p>
+            </div>
+        </div>
+
+        <div id="tab5" class="content">
+            <div class="section">
+                <h3>Teoria: Legame Covalente Polare</h3>
+                <p>Condivisione sbilanciata degli elettroni verso l'atomo più elettronegativo, creando cariche parziali (δ+ e δ-). Esempio: H2O.</p>
+            </div>
+        </div>
+
+        <div id="tab6" class="content">
+            <div class="section">
+                <h3>Teoria: Legame a Idrogeno</h3>
+                <p>Attrazione tra molecole diverse. Si forma tra l'Idrogeno e atomi molto elettronegativi come Ossigeno, Azoto o Fluoro.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(event, tabId) {
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function updateBondType(val) {
+            document.getElementById('deltaValue').innerText = val;
+            let resultText = "";
+            if (val < 0.4) resultText = "Legame Covalente Apolare";
+            else if (val >= 0.4 && val < 1.7) resultText = "Legame Covalente Polare";
+            else resultText = "Legame Ionico";
+            document.getElementById('bondResult').innerText = resultText;
+        }
+    </script>
+</body>
+</html>
